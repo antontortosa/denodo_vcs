@@ -1,0 +1,49 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_products
+    FOLDER = '/1 - data connection/2 - base views'
+    DATASOURCENAME=ds_sqlexpress
+    CATALOGNAME='${databases.db_sales.folder.1 - data connection.folder.2 - base views.views.jdbc.bv_products.CATALOGNAME}' 
+    SCHEMANAME='${databases.db_sales.folder.1 - data connection.folder.2 - base views.views.jdbc.bv_products.SCHEMANAME}' 
+    RELATIONNAME='products' 
+    OUTPUTSCHEMA (
+        product_id = 'product_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int identity')  NOT NULL NOT SORTABLE IS_AUTOINCREMENT,
+        product_name = 'product_name' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        brand_id = 'brand_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        category_id = 'category_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        model_year = 'model_year' :'java.lang.Short' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='5', sourcetypeid='5', sourcetypename='smallint')  NOT NULL SORTABLE,
+        list_price = 'list_price' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='3', sourcetypename='decimal')  NOT NULL SORTABLE
+    )
+    CONSTRAINT 'PK__products__47027DF5623F13CC' PRIMARY KEY ( 'product_id' )
+    CONSTRAINT 'FK__products__brand___74AE54BC' FOREIGN KEY ( 'brand_id' ) 
+    REFERENCES 'denodo_test'.'production'.'brands'( 'brand_id' )  ON UPDATE CASCADE  ON DELETE CASCADE NOT DEFERRABLE 
+    CONSTRAINT 'FK__products__catego__73BA3083' FOREIGN KEY ( 'category_id' ) 
+    REFERENCES 'denodo_test'.'production'.'categories'( 'category_id' )  ON UPDATE CASCADE  ON DELETE CASCADE NOT DEFERRABLE 
+    INDEX 'PK__products__47027DF5623F13CC' CLUSTER UNIQUE PRIMARY ( 'product_id' );
+
+CREATE OR REPLACE TABLE bv_products I18N us_cst (
+        product_id:int (autoincrement, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        product_name:text (sourcetypeid = '12', sourcetypesize = '255'), 
+        brand_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        category_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        model_year:int (sourcetypeid = '5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '5'), 
+        list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '10')
+    )
+    FOLDER = '/1 - data connection/2 - base views'
+    CONSTRAINT 'PK__products__47027DF5623F13CC' PRIMARY KEY ( 'product_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_products(
+        I18N us_cst
+        CONSTRAINTS (
+             ADD product_id (any) OPT ANY
+             ADD product_name (any) OPT ANY
+             ADD brand_id (any) OPT ANY
+             ADD category_id (any) OPT ANY
+             ADD model_year (any) OPT ANY
+             ADD list_price (any) OPT ANY
+        )
+        OUTPUTLIST (brand_id, category_id, list_price, model_year, product_id, product_name
+        )
+        WRAPPER (jdbc bv_products)
+    );
+

@@ -1,0 +1,13 @@
+﻿/databases/db_sales/folder.2 -derived views/2 -derived views.vql
+/databases/db_sales/folder.1 - data connection/1 - data connection.vql
+/databases/db_sales/folder.1 - data connection/folder.2 - base views/2 - base views.vql
+/databases/db_sales/folder.1 - data connection/folder.1 - data sources/1 - data sources.vql
+/databases/db_sales/folder.1 - data connection/folder.1 - data sources/datasources/jdbc/ds_sqlexpress.vql
+/databases/db_sales/folder.1 - data connection/folder.2 - base views/views/bv_order_items.vql
+/databases/db_sales/folder.1 - data connection/folder.2 - base views/views/bv_orders.vql
+/databases/db_sales/folder.1 - data connection/folder.2 - base views/views/bv_products.vql
+/databases/db_sales/folder.1 - data connection/folder.2 - base views/views/bv_stocks.vql
+/databases/db_sales/folder.1 - data connection/folder.2 - base views/views/bv_categories.vql
+/databases/db_sales/folder.1 - data connection/folder.2 - base views/views/bv_brands.vql
+/databases/db_sales/folder.1 - data connection/folder.2 - base views/views/bv_customers.vql
+/databases/db_sales/folder.1 - data connection/folder.2 - base views/views/bv_staffs.vql

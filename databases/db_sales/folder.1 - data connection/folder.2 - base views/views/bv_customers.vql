@@ -1,0 +1,54 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_customers
+    FOLDER = '/1 - data connection/2 - base views'
+    DATASOURCENAME=ds_sqlexpress
+    CATALOGNAME='${databases.db_sales.folder.1 - data connection.folder.2 - base views.views.jdbc.bv_customers.CATALOGNAME}' 
+    SCHEMANAME='${databases.db_sales.folder.1 - data connection.folder.2 - base views.views.jdbc.bv_customers.SCHEMANAME}' 
+    RELATIONNAME='customers' 
+    OUTPUTSCHEMA (
+        customer_id = 'customer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int identity')  NOT NULL NOT SORTABLE IS_AUTOINCREMENT,
+        first_name = 'first_name' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        last_name = 'last_name' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        phone = 'phone' :'java.lang.String' (OPT) (sourcetypesize='25', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        street = 'street' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        city = 'city' :'java.lang.String' (OPT) (sourcetypesize='50', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        state = 'state' :'java.lang.String' (OPT) (sourcetypesize='25', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        zip_code = 'zip_code' :'java.lang.String' (OPT) (sourcetypesize='5', sourcetypeid='12', sourcetypename='varchar')  SORTABLE
+    )
+    CONSTRAINT 'PK__customer__CD65CB854042AD3D' PRIMARY KEY ( 'customer_id' )
+    INDEX 'PK__customer__CD65CB854042AD3D' CLUSTER UNIQUE PRIMARY ( 'customer_id' );
+
+CREATE OR REPLACE TABLE bv_customers I18N us_cst (
+        customer_id:int (autoincrement, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        first_name:text (sourcetypeid = '12', sourcetypesize = '255'), 
+        last_name:text (sourcetypeid = '12', sourcetypesize = '255'), 
+        phone:text (sourcetypeid = '12', sourcetypesize = '25'), 
+        email:text (sourcetypeid = '12', sourcetypesize = '255'), 
+        street:text (sourcetypeid = '12', sourcetypesize = '255'), 
+        city:text (sourcetypeid = '12', sourcetypesize = '50'), 
+        state:text (sourcetypeid = '12', sourcetypesize = '25'), 
+        zip_code:text (sourcetypeid = '12', sourcetypesize = '5')
+    )
+    FOLDER = '/1 - data connection/2 - base views'
+    CONSTRAINT 'PK__customer__CD65CB854042AD3D' PRIMARY KEY ( 'customer_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_customers(
+        I18N us_cst
+        CONSTRAINTS (
+             ADD customer_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD phone (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD street (any) OPT ANY
+             ADD city (any) OPT ANY
+             ADD state (any) OPT ANY
+             ADD zip_code (any) OPT ANY
+        )
+        OUTPUTLIST (city, customer_id, email, first_name, last_name, phone, state, street, zip_code
+        )
+        WRAPPER (jdbc bv_customers)
+    );
+

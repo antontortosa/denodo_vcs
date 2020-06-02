@@ -1,0 +1,33 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_brands
+    FOLDER = '/1 - data connection/2 - base views'
+    DATASOURCENAME=ds_sqlexpress
+    CATALOGNAME='${databases.db_sales.folder.1 - data connection.folder.2 - base views.views.jdbc.bv_brands.CATALOGNAME}' 
+    SCHEMANAME='${databases.db_sales.folder.1 - data connection.folder.2 - base views.views.jdbc.bv_brands.SCHEMANAME}' 
+    RELATIONNAME='brands' 
+    OUTPUTSCHEMA (
+        brand_id = 'brand_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int identity')  NOT NULL NOT SORTABLE IS_AUTOINCREMENT,
+        brand_name = 'brand_name' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE
+    )
+    CONSTRAINT 'PK__brands__5E5A8E27114EEE26' PRIMARY KEY ( 'brand_id' )
+    INDEX 'PK__brands__5E5A8E27114EEE26' CLUSTER UNIQUE PRIMARY ( 'brand_id' );
+
+CREATE OR REPLACE TABLE bv_brands I18N us_cst (
+        brand_id:int (autoincrement, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        brand_name:text (sourcetypeid = '12', sourcetypesize = '255')
+    )
+    FOLDER = '/1 - data connection/2 - base views'
+    CONSTRAINT 'PK__brands__5E5A8E27114EEE26' PRIMARY KEY ( 'brand_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_brands(
+        I18N us_cst
+        CONSTRAINTS (
+             ADD brand_id (any) OPT ANY
+             ADD brand_name (any) OPT ANY
+        )
+        OUTPUTLIST (brand_id, brand_name
+        )
+        WRAPPER (jdbc bv_brands)
+    );
+

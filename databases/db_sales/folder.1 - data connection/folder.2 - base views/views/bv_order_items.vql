@@ -1,0 +1,49 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_order_items
+    FOLDER = '/1 - data connection/2 - base views'
+    DATASOURCENAME=ds_sqlexpress
+    CATALOGNAME='${databases.db_sales.folder.1 - data connection.folder.2 - base views.views.jdbc.bv_order_items.CATALOGNAME}' 
+    SCHEMANAME='${databases.db_sales.folder.1 - data connection.folder.2 - base views.views.jdbc.bv_order_items.SCHEMANAME}' 
+    RELATIONNAME='order_items' 
+    OUTPUTSCHEMA (
+        order_id = 'order_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        item_id = 'item_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        product_id = 'product_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        quantity = 'quantity' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        list_price = 'list_price' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='3', sourcetypename='decimal')  NOT NULL SORTABLE,
+        discount = 'discount' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='4', sourcetypeid='3', sourcetypename='decimal')  NOT NULL SORTABLE
+    )
+    CONSTRAINT 'PK__order_it__837942D459AC60D0' PRIMARY KEY ( 'order_id' , 'item_id' )
+    CONSTRAINT 'FK__order_ite__produ__06CD04F7' FOREIGN KEY ( 'product_id' ) 
+    REFERENCES 'denodo_test'.'production'.'products'( 'product_id' )  ON UPDATE CASCADE  ON DELETE CASCADE NOT DEFERRABLE 
+    CONSTRAINT 'FK__order_ite__order__05D8E0BE' FOREIGN KEY ( 'order_id' ) 
+    REFERENCES 'denodo_test'.'sales'.'orders'( 'order_id' )  ON UPDATE CASCADE  ON DELETE CASCADE NOT DEFERRABLE 
+    INDEX 'PK__order_it__837942D459AC60D0' CLUSTER UNIQUE PRIMARY ( 'order_id' , 'item_id' );
+
+CREATE OR REPLACE TABLE bv_order_items I18N us_cst (
+        order_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        item_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        product_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        quantity:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '10'), 
+        discount:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '4')
+    )
+    FOLDER = '/1 - data connection/2 - base views'
+    CONSTRAINT 'PK__order_it__837942D459AC60D0' PRIMARY KEY ( 'order_id' , 'item_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_order_items(
+        I18N us_cst
+        CONSTRAINTS (
+             ADD order_id (any) OPT ANY
+             ADD item_id (any) OPT ANY
+             ADD product_id (any) OPT ANY
+             ADD quantity (any) OPT ANY
+             ADD list_price (any) OPT ANY
+             ADD discount (any) OPT ANY
+        )
+        OUTPUTLIST (discount, item_id, list_price, order_id, product_id, quantity
+        )
+        WRAPPER (jdbc bv_order_items)
+    );
+

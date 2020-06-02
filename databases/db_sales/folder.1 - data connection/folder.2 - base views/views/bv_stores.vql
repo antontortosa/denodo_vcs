@@ -1,0 +1,51 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_stores
+    FOLDER = '/1 - data connection/2 - base views'
+    DATASOURCENAME=ds_sqlexpress
+    CATALOGNAME='${databases.db_sales.folder.1 - data connection.folder.2 - base views.views.jdbc.bv_stores.CATALOGNAME}' 
+    SCHEMANAME='${databases.db_sales.folder.1 - data connection.folder.2 - base views.views.jdbc.bv_stores.SCHEMANAME}' 
+    RELATIONNAME='stores' 
+    OUTPUTSCHEMA (
+        store_id = 'store_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int identity')  NOT NULL NOT SORTABLE IS_AUTOINCREMENT,
+        store_name = 'store_name' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        phone = 'phone' :'java.lang.String' (OPT) (sourcetypesize='25', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        street = 'street' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        city = 'city' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        state = 'state' :'java.lang.String' (OPT) (sourcetypesize='10', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        zip_code = 'zip_code' :'java.lang.String' (OPT) (sourcetypesize='5', sourcetypeid='12', sourcetypename='varchar')  SORTABLE
+    )
+    CONSTRAINT 'PK__stores__A2F2A30C977D18E8' PRIMARY KEY ( 'store_id' )
+    INDEX 'PK__stores__A2F2A30C977D18E8' CLUSTER UNIQUE PRIMARY ( 'store_id' );
+
+CREATE OR REPLACE TABLE bv_stores I18N us_cst (
+        store_id:int (autoincrement, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        store_name:text (sourcetypeid = '12', sourcetypesize = '255'), 
+        phone:text (sourcetypeid = '12', sourcetypesize = '25'), 
+        email:text (sourcetypeid = '12', sourcetypesize = '255'), 
+        street:text (sourcetypeid = '12', sourcetypesize = '255'), 
+        city:text (sourcetypeid = '12', sourcetypesize = '255'), 
+        state:text (sourcetypeid = '12', sourcetypesize = '10'), 
+        zip_code:text (sourcetypeid = '12', sourcetypesize = '5')
+    )
+    FOLDER = '/1 - data connection/2 - base views'
+    CONSTRAINT 'PK__stores__A2F2A30C977D18E8' PRIMARY KEY ( 'store_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_stores(
+        I18N us_cst
+        CONSTRAINTS (
+             ADD store_id (any) OPT ANY
+             ADD store_name (any) OPT ANY
+             ADD phone (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD street (any) OPT ANY
+             ADD city (any) OPT ANY
+             ADD state (any) OPT ANY
+             ADD zip_code (any) OPT ANY
+        )
+        OUTPUTLIST (city, email, phone, state, store_id, store_name, street, zip_code
+        )
+        WRAPPER (jdbc bv_stores)
+    );
+
