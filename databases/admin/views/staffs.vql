@@ -1,0 +1,54 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC staffs
+    DATASOURCENAME=ds_sqlserver
+    CATALOGNAME='${databases.admin.views.jdbc.staffs.CATALOGNAME}' 
+    SCHEMANAME='${databases.admin.views.jdbc.staffs.SCHEMANAME}' 
+    RELATIONNAME='staffs' 
+    OUTPUTSCHEMA (
+        staff_id = 'staff_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int identity')  NOT NULL NOT SORTABLE IS_AUTOINCREMENT,
+        first_name = 'first_name' :'java.lang.String' (OPT) (sourcetypesize='50', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        last_name = 'last_name' :'java.lang.String' (OPT) (sourcetypesize='50', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypesize='255', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        phone = 'phone' :'java.lang.String' (OPT) (sourcetypesize='25', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        active = 'active' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='3', sourcetypeid='-6', sourcetypename='tinyint')  NOT NULL SORTABLE,
+        store_id = 'store_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        manager_id = 'manager_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  SORTABLE
+    )
+    CONSTRAINT 'PK__staffs__1963DD9CF185BFEB' PRIMARY KEY ( 'staff_id' )
+    CONSTRAINT 'FK__staffs__manager___7D439ABD' FOREIGN KEY ( 'manager_id' ) 
+    REFERENCES 'denodo_test'.'sales'.'staffs'( 'staff_id' )  ON UPDATE RESTRICT  ON DELETE RESTRICT NOT DEFERRABLE 
+    CONSTRAINT 'FK__staffs__store_id__7C4F7684' FOREIGN KEY ( 'store_id' ) 
+    REFERENCES 'denodo_test'.'sales'.'stores'( 'store_id' )  ON UPDATE CASCADE  ON DELETE CASCADE NOT DEFERRABLE 
+    INDEX 'PK__staffs__1963DD9CF185BFEB' CLUSTER UNIQUE PRIMARY ( 'staff_id' )
+    INDEX 'UQ__staffs__AB6E61644C563D09' OTHER UNIQUE ( 'email' );
+
+CREATE OR REPLACE TABLE staffs I18N us_pst (
+        staff_id:int (autoincrement, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        first_name:text (sourcetypeid = '12', sourcetypesize = '50'), 
+        last_name:text (sourcetypeid = '12', sourcetypesize = '50'), 
+        email:text (sourcetypeid = '12', sourcetypesize = '255'), 
+        phone:text (sourcetypeid = '12', sourcetypesize = '25'), 
+        active:int (sourcetypeid = '-6', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '3'), 
+        store_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        manager_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10')
+    )
+    CONSTRAINT 'PK__staffs__1963DD9CF185BFEB' PRIMARY KEY ( 'staff_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD staffs(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD staff_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone (any) OPT ANY
+             ADD active (any) OPT ANY
+             ADD store_id (any) OPT ANY
+             ADD manager_id (any) OPT ANY
+        )
+        OUTPUTLIST (active, email, first_name, last_name, manager_id, phone, staff_id, store_id
+        )
+        WRAPPER (jdbc staffs)
+    );
+
